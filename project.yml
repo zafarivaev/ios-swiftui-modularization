@@ -1,0 +1,139 @@
+name: SimpsonsQuotes
+
+options:
+    bundleIdPrefix: com.zafar.simpsons-quotes
+    createIntermediateGroups: true
+    deploymentTarget:
+        iOS: 15.0
+    groupOrdering:
+        - pattern: '^.*SimpsonsQuotes'
+          order: [Application, Presentation, Data, Domain]
+        - pattern: '^.*Presentation$'
+          order: [Assets, Navigator, Features, Models]
+        - pattern: '^.*Features$'
+          order: [Start, Sign In, Main, Quotes, Quote Detail, Settings]
+        
+targetTemplates:
+    Module:
+        type: framework
+        platform: iOS
+        deploymentTarget: 15.0
+        settings:
+            base:
+                GENERATE_INFOPLIST_FILE: true
+                TARGETED_DEVICE_FAMILY: 1
+                SUPPORTS_MACCATALYST: false
+                
+targets:
+    Application:
+        type: application
+        platform: iOS
+        info:
+            path: SimpsonsQuotes/Application/Info.plist
+            properties:
+                UILaunchStoryboardName: "LaunchScreen"
+                CFBundleDisplayName: "SimpsonsQuotes"
+                CFBundleShortVersionString: "1.0.0"
+                UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+                NSAppTransportSecurity:
+                    NSAllowsArbitraryLoads: true
+        settings:
+            base:
+                TARGETED_DEVICE_FAMILY: 1
+                PRODUCT_BUNDLE_IDENTIFIER: "com.zafar.simpsons-quotes"
+                CURRENT_PROJECT_VERSION: 1
+        sources: [SimpsonsQuotes/Application, SimpsonsQuotes/Presentation/Assets/Assets.xcassets]
+        dependencies:
+            - target: Assets
+            - target: Navigator
+        
+    Assets:
+        templates:
+            - Module
+        sources: [SimpsonsQuotes/Presentation/Assets]
+        
+    Navigator:
+        templates:
+            - Module
+        sources: [SimpsonsQuotes/Presentation/Navigator]
+        dependencies:
+            - target: Start
+            - target: SignIn
+            - target: Main
+            - target: Quotes
+            - target: QuoteDetail
+            - target: Settings
+            
+    Models:
+        templates:
+            - Module
+        sources: [SimpsonsQuotes/Presentation/Models]
+        dependencies:
+            - target: Entities
+            
+    Start:
+        templates:
+            - Module
+        sources: [SimpsonsQuotes/Presentation/Features/Start]
+        dependencies:
+            - target: Services
+            
+    SignIn:
+        templates:
+            - Module
+        sources: [SimpsonsQuotes/Presentation/Features/Sign In]
+        dependencies:
+            - target: Models
+            - target: Services
+
+    Main:
+        templates:
+            - Module
+        sources: [SimpsonsQuotes/Presentation/Features/Main]
+        
+    Quotes:
+        templates:
+            - Module
+        sources: [SimpsonsQuotes/Presentation/Features/Quotes]
+        dependencies:
+            - target: Services
+            - target: Models
+            
+    QuoteDetail:
+        templates:
+            - Module
+        sources: [SimpsonsQuotes/Presentation/Features/Quote Detail]
+        dependencies:
+            - target: Models
+            
+    Settings:
+        templates:
+            - Module
+        sources: [SimpsonsQuotes/Presentation/Features/Settings]
+        dependencies:
+            - target: Services
+            
+    Endpoints:
+        templates:
+            - Module
+        sources: [SimpsonsQuotes/Data/Endpoints]
+        
+    Services:
+        templates:
+            - Module
+        sources: [SimpsonsQuotes/Data/Services]
+        dependencies:
+            - target: Endpoints
+            - target: Entities
+            - target: Networker
+            
+    Networker:
+        templates:
+            - Module
+        sources: [SimpsonsQuotes/Domain/Networker]
+            
+    Entities:
+        templates:
+            - Module
+        sources: [SimpsonsQuotes/Domain/Entities]
+        
