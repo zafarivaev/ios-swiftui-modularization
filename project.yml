@@ -46,6 +46,17 @@ targets:
         dependencies:
             - target: Assets
             - target: Navigator
+            - target: Models
+            - target: Start
+            - target: SignIn
+            - target: Main
+            - target: Quotes
+            - target: QuoteDetail
+            - target: Settings
+            - target: Endpoints
+            - target: Services
+            - target: Networker
+            - target: Entities
         
     Assets:
         templates:
